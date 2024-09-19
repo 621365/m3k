@@ -1,0 +1,931 @@
+<!doctype html>
+<html>
+    <!--Made by Gabriel Lazaro, heavily inspired by Mother 3-->
+    <head>
+        <meta charset="utf-8" />
+        <title>キーボードKEYBOARD</title>
+        <link rel="icon" type="image/png" href="favicon.png">
+        <meta name="viewport" content="user-scalable=no">
+        <style>
+            * {
+                font-family: "Lucida Grande", "Lucida Sans", Lucida, Helvetica, Ariel, sans-serif;
+                font-weight: bold;
+                touch-action: manipulation;
+            }
+            .row,
+            #controls {
+                display: flex;
+                user-select: none;
+                cursor: pointer;
+            }
+
+            body {
+                width: 24.5cm;
+                background-color: grey;
+            }
+
+            #HGRA,
+            #KTRA,
+            #ALPH {
+                width: 3.5cm;
+                text-align: center;
+            }
+
+            #box {
+                background-color: tan;
+                border-radius: 5pt;
+                box-shadow: 0 0 0cm 0.2cm white inset;
+                border: solid black 0.1cm;
+                padding: 0.3cm;
+            }
+
+            #ENTR {
+                width: 4.45cm;
+                text-align: center;
+            }
+
+            input {
+                border: none;
+                border: solid black 0.1cm;
+                user-select: none;
+                cursor: pointer;
+                background: tan;
+                border-radius: 5pt;
+                box-shadow: 0 0 0cm 0.2cm white inset;
+                padding: 0.3cm;
+                height: 1cm;
+                width: 100%;
+                max-width: 23.75cm;
+                margin-bottom: 0.25cm;
+                font-size: 24pt;
+            }
+
+            input::placeholder {
+                color: black;
+            }
+
+            * {
+                transition: all 0.25s cubic-bezier(0, 1, 0.5, 1);
+            }
+
+            .row > div,
+            #controls > div {
+                padding: 1pt 7pt 1pt 5pt;
+
+                height: 1cm;
+                vertical-align: top;
+                font-size: 18pt;
+            }
+
+            .row > div {
+                width: 1cm;
+                text-align: center;
+                height: 1cm;
+                font-size: 20pt;
+            }
+
+            #ALPH {
+                width: 2.5cm;
+            }
+            #CHAR {
+                width: 2cm;
+                text-align: center;
+            }
+
+            #DLTE {
+                width: 3cm;
+                text-align: center;
+            }
+
+            #CLER {
+                width: 2.5cm;
+                text-align: center;
+            }
+
+            .row > div:focus::before,
+            #controls > div:focus::before {
+                content: ">";
+                margin-left: -0.3cm;
+                font-weight: bold;
+                -webkit-text-stroke: 1pt white;
+                color: white;
+                position: absolute;
+                right: auto;
+                font-size: 12pt;
+                top: auto;
+                margin-top: 6pt;
+                text-shadow:
+                    -1pt 1pt black,
+                    1pt -1pt black,
+                    1pt 1pt black,
+                    -1pt -1pt black;
+            }
+
+            .row > div:active::after,
+            #controls > div:active::after {
+                content: "<";
+                margin-right: -0.3cm;
+                font-weight: bold;
+                -webkit-text-stroke: 1pt white;
+                color: white;
+                position: absolute;
+                right: auto;
+                font-size: 12pt;
+                top: auto;
+                margin-top: 6pt;
+                text-shadow:
+                    -1pt 1pt black,
+                    1pt -1pt black,
+                    1pt 1pt black,
+                    -1pt -1pt black;
+            }
+
+            input:focus,
+            input:hover,
+            .row > div:focus,
+            #controls > div:focus {
+                outline: none;
+                background-color: cyan;
+            }
+
+            input:active,
+            .row > div:active,
+            #control > div:active {
+                background-color: black;
+                color: white;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background-color: black;
+                }
+
+                .row > div:focus::before,
+                #controls > div:focus::before {
+                    -webkit-text-stroke: 1pt black;
+                    color: black;
+                    text-shadow:
+                        -1pt 1pt white,
+                        1pt -1pt white,
+                        1pt 1pt white,
+                        -1pt -1pt white;
+                }
+                .row > div:active::after,
+                #controls > div:active::after {
+                    -webkit-text-stroke: 1pt black;
+                    color: black;
+                    text-shadow:
+                        -1pt 1pt white,
+                        1pt -1pt white,
+                        1pt 1pt white,
+                        -1pt -1pt white;
+                }
+                #box,
+                input {
+                    background-color: purple;
+                    border-color: white;
+                    box-shadow: 0 0 0cm 0.2cm black inset;
+                    color: white;
+                }
+
+                input::placeholder {
+                    color: white;
+                }
+
+                input:focus,
+                input:hover,
+                .row > div:focus,
+                #controls > div:focus {
+                    outline: none;
+                    background-color: blue;
+                }
+
+                input:active,
+                input:active::placeholder,
+                .row > div:active,
+                #controls > div:active {
+                    background-color: white;
+                    color: black;
+                }
+            }
+
+            /*SKIPPER IMPORT*/
+
+            .skipper {
+                display: block;
+                opacity: 0;
+                transition-property: transform, opacity, left;
+                transition-duration: 0.25s, 0.25s, 0s;
+                transition-delay: 0s, 0s, 0.25s;
+                transition-timing-function: ease-in;
+                position: fixed;
+                top: 0;
+                left: -100vw;
+                text-align: center;
+                width: 100vw;
+                height: 100vh;
+                background: radial-gradient(
+                    ellipse at center,
+                    rgba(0, 0, 0, 0) 0%,
+                    rgba(0, 0, 0, 0.4) 80%,
+                    rgba(0, 0, 0, 0.5) 100%
+                );
+                z-index: 10;
+            }
+
+            .skipper-title,
+            .skipper a {
+                font-weight: bold;
+                opacity: 1;
+                z-index: 2;
+                font-size: 20pt;
+                text-decoration: none;
+            }
+
+            .skipper-title {
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .skipper a {
+                background: linear-gradient(#ffffffa0 0%, #6f6f88a0 50%, #555555a0 50%, #9999bba0 100%);
+                border: solid #111111 0.1rem;
+                border-radius: 0.4rem;
+                text-shadow: 0 -0.1rem black;
+                color: white;
+                font-family: Helvetica, sans, sans-serif;
+                font-weight: bold;
+                cursor: pointer;
+                text-decoration: none;
+                display: block;
+                padding: 1rem 2rem;
+                margin: 0.2rem;
+                vertical-align: middle;
+                box-shadow:
+                    0 0.06rem grey,
+                    0.02rem 0.04rem grey inset,
+                    -0.02rem 0.04rem grey inset;
+            }
+
+            .skipper a:focus {
+                text-shadow: 0 -0.1rem black;
+                outline: none;
+            }
+
+            .skipper a:hover {
+                background: linear-gradient(#ffffff80 0%, #6f6f8880 50%, #55555580 50%, #9999bb80 100%);
+                text-shadow: 0 -0.1rem black;
+            }
+
+            .skipper a:active {
+                background: linear-gradient(#dddddda0 0%, #3f3f55a0 50%, #333333a0 50%, #666699a0 100%);
+                text-shadow: 0 -0.1rem black;
+            }
+
+            .skipper-text {
+                font-weight: normal;
+                opacity: 1;
+                z-index: 2;
+                font-size: 16pt;
+                margin-bottom: 1rem;
+            }
+
+            .skipper-container-border {
+                position: fixed;
+                bottom: calc(50vh - 2cm);
+                left: -100vw;
+                width: 14cm;
+                padding: 0.5rem;
+                text-shadow: 0 -0.1rem black;
+                color: white;
+                font-family: Helvetica, sans, sans-serif;
+                border-radius: 1rem;
+                box-shadow:
+                    0 0 0.2rem black,
+                    0 0 0 0.2rem white inset;
+                background: radial-gradient(at center, rgb(0, 15, 65, 0.7) 0%, rgb(0, 0, 40, 0.7) 100%);
+                transition-property: transform, opacity, left;
+                transition-duration: 0.25s, 0.25s, 0.25s;
+                transition-delay: 0s, 0s, 0.3s;
+                transition-timing-function: ease-in;
+                transform: scale(1.1);
+                opacity: 0;
+            }
+
+            .skipper-container-border:focus-within {
+                transition-property: transform, opacity, left;
+                transition-duration: 0.25s, 0.25s, 0s;
+                transition-delay: 0s, 0s, 0s;
+                transition-timing-function: ease-in;
+                left: calc(50vw - 7cm - 1rem);
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            .skipper-container-border::after {
+                position: absolute;
+                content: "";
+                border-radius: 1rem 1rem 0 0;
+                background: radial-gradient(
+                        farthest-side at center top,
+                        rgba(255, 255, 255, 0.5) 50%,
+                        rgba(255, 255, 255, 0.2) 70%,
+                        rgba(255, 255, 255, 0) 71%
+                    )
+                    /*, linear-gradient(to bottom,rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.7) 40%, rgba(255,255,255,0) 60%)*/;
+                background-size: 300% 80%;
+                background-repeat: no-repeat;
+                background-position: 50% -185%;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                image-rendering: optimizeQuality !important;
+            }
+
+            .skipper:focus-within {
+                transition: opacity 0.25s ease-in;
+                opacity: 1;
+                left: 0;
+                top: 0;
+            }
+
+            /* Part of the Accessibility Framework Based off of Placehorsey Accessibility Framework */
+            /* TODO: ADD DARK THEME + HIGH CONTRAST THEME */
+            /* Again, I know that I'm not supposed to do this, but I'm copying my accessibility framework from Placehorsey; I am proud of how reliable it is and how cool it looks. */
+            @media (prefers-reduced-motion) {
+                html,
+                body,
+                button,
+                a,
+                nav,
+                footer,
+                *,
+                :hover,
+                :focus,
+                :active,
+                *:hover,
+                *:focus,
+                *:active {
+                    transition-duration: 0s !important;
+                    animation-duration: 0s !important;
+                    scroll-behavior: unset !important;
+                    scroll-behavior: auto;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <input id="text" type="text" title="たのしいネーミング/Nameplay" placeholder="テキストをここに置く：" autofill="none" autocomplete="off" />
+        <div id="box">
+            <div id="keyboard"></div>
+            <div id="controls">
+                <div id="HGRA" title="かな/Hiragana" onclick="fill('hga');" tabindex="0">ひらがな</div>
+                <div id="KTRA" title="カナ/Katakana" onclick="fill('kta');"  tabindex="0">カタカナ</div>
+                <div id="ALPH" title="Alphabet/ラテンアルファベット" onclick="fill('abc');" tabindex="0">ABCD</div>
+                <div id="CHAR" title="スペシャル/Ειδικό" onclick="fill('chr');" tabindex="0">12?!</div>
+                <div id="DLTE" title="Delete" onclick="delet();" tabindex="0">もどる </div>
+                <div id="CLER" title="RESET" onclick="cler();" tabindex="0">再設定</div>
+                <div id="ENTR" title="OK" tabindex="0">おれり</div>
+            </div>
+        </div>
+        <script>
+            var audioContext = new (window.AudioContext || window.webkitAudioContext)({
+                latencyHint: 0.01
+            });
+            const noMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            function delesp(e) {
+                // quickpatch
+                if (e.code == "Enter") {
+                }
+            }
+            
+            const consoleError = console.error;
+            console.error = function(message, args) {
+                new alert("ERRORエラー", message.toString());
+                consoleError(message,args);
+                return message;
+            
+            }
+
+            function replay(audio) {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.play();
+            }
+
+            const HGRA = document.getElementById("HGRA");
+            const KTRA = document.getElementById("KTRA");
+            const ALPH = document.getElementById("ALPH");
+            const CHAR = document.getElementById("CHAR");
+            const DLTE = document.getElementById("DLTE");
+            const CLER = document.getElementById("CLER");
+            const ENTR = document.getElementById("ENTR");
+
+            const ERR = new Audio("https://codehs.com/uploads/ae78636cf3ed496bf500a86f06441b81");
+            const HZL = new Audio("https://codehs.com/uploads/6ae939ac1b3ad333ba578de0b6624851");
+            const VTL = new Audio("https://codehs.com/uploads/047d7962ce75ff506c1eaa236f7184a5");
+            const BGM = new Audio("https://codehs.com/uploads/530c75b7252c27125c081b4165af193f");
+            const SEL = new Audio("https://codehs.com/uploads/72ee3d306e20c6f6baa49edba9aaf92b");
+            const TRY = new Audio("https://codehs.com/uploads/9105250f2be8b9e3d619283e61d1f9eb");
+            const USL = new Audio("https://codehs.com/uploads/859a162b7d94e8b1b81121394ff7fc10");
+
+            const TXTB = document.getElementById("text");
+
+            BGM.volume = 1;
+            BGM.muted = false;
+            BGM.loop = true;
+            //BGM.paused = true;
+            // BGM.play();
+            document.addEventListener("click", (e) => {
+                var audioContext = new (window.AudioContext || window.webkitAudioContext)({
+                    latencyHint: 0.001
+                });
+                BGM.play();
+            });
+
+            TXTB.addEventListener("click", (e) => {
+                replay(SEL);
+            });
+            TXTB.addEventListener("mouseenter", (e) => {
+                replay(VTL);
+            });
+            document.addEventListener("keydown", (e) => {
+                if (e.key == "Tab") replay(HZL);
+            });
+
+            DLTE.addEventListener("keypress", delesp); //quickpatch maybe
+            document.addEventListener("keydown", (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.keyCode == 76) {
+                    e.preventDefault();
+                    BGM.muted = BGM.muted ? false : true;
+                    // if (BGM.paused) {BGM.play();} else {BGM.pause();}
+                }
+            });
+            var text = document.getElementById("text");
+            text.setAttribute( "autocomplete", "off" ); 
+            const controls = document.getElementById("controls");
+
+            const hiagara =
+                "あいうえお はひふへほ がぎぐげごかきくけこ まみむめも ざじずぜぞさしすせそ や ゆ よ だぢづでどたちつてと らりるれろ ばびぶべぼなにぬねの わ を ん ぱぴぷぺぽあいうえお や ゆ よ 。wWつー";
+            const katakana =
+                "アイウエオ ハヒフヘホ ガギグゲゴカキクケコ マミムメモ ザジズゼゾサシスセソ ヤ ユ ヨ ダヂヅデドタチツテト ラリルレロ バビブベボナニヌネノ ワ ヲ ン パピプペポアイウエオ ヤ ユ ヨ 。Wツシー";
+            const alphabet =
+                'ABCDE abcde 01234FGHIJ fghij 56789KLMNO klmno *~"\⋅.PQRST pqrst \“\”\\\/=UVWXY uvwxy +-\×\÷\@Z()[] z!?., \♪\:\;\&\◉';
+            const charesp =
+                "$±♂♀☿ ♪♫°≠♥ ¥₩£€₱ΑΒΓΔΕ ΖΗΘΛΜ ΝΞΠΡΣαβγδε ζηθιλ μνξρσΤΥÆæΨ τυΦφχ ςΩωΟοÁÉÍÓÚ ÀÈÌÒÙ ÑÇ¡¿®áéíóú àèìòù ñç©¢ü";
+            var lastFocus = { id: "" };
+            function enter(e) {
+            try {
+                if (e.shiftKey) {
+                if (text.value == "どく") {
+                console.error("このキーボードはパニックに陥った。");
+                return null;
+            }
+                    window.open("https://www.deepl.com/en/translator#en/ja/" + text.value, "_blank").focus();
+                    //trans(text.value, "ja");//deepl integration
+                } else {
+                if (text.value == "どく") {
+                console.error("このキーボードはパニックに陥った。");
+                return null;
+            }
+                    window.open("https://www.deepl.com/en/translator#ja/en-us/" + text.value, "_blank").focus();
+                    //trans(text.value, "en");//deepl integration
+                }} catch (err) {
+                    new alert("ERRORエラー", "説明"+err.toString());
+                }
+            }
+
+            //document.getElementById("ENTR").addEventListener("touchstart", enter);
+            document.getElementById("ENTR").addEventListener("click", enter);
+
+            function delet() {
+                replay(USL);
+                text.value = text.value.substr(0, text.value.length - 1);
+            }
+
+            function cler() {
+                text.value = "";
+            }
+
+            // load stuff
+
+            var keys = {};
+            for (let i = 0; i < 6; i++) {
+                keys["ar" + i] = document.createElement("div");
+                keys["ar" + i].className = "row";
+                keys["ar" + i].id = "row" + i;
+                keys["bt" + i] = [];
+                for (let j = 0; j < 17; j++) {
+                    keys["bt" + i][j] = document.createElement("div");
+                    keys["bt" + i][j].id = i + "-" + j;
+                    keys["bt" + i][j].tabIndex = "0";
+                    keys["bt" + i][j].addEventListener("onclick", function (e) {
+                        console.log("value " + this.innerHTML);
+                    });
+                    keys["bt" + i][j].onclick = function (e) {
+                        replay(SEL);
+                        text.value += this.innerHTML[0];
+                    };
+                    //keys["bt" + i][j].ontouchstart = keys["bt" + i][j].onclick;
+                    keys["bt" + i][j].onkeydown = function (e) {
+                        switch (e.code) {
+                            case "Enter":
+                                replay(SEL);
+                                this.click();
+                                break;
+                            case "ArrowLeft":
+                                replay(HZL);
+                                if (j - 1 < 0) {
+                                    keys["bt" + i][16].focus();
+                                } else {
+                                    keys["bt" + i][j - 1].focus();
+                                }
+                                break;
+                            case "ArrowRight":
+                                replay(HZL);
+                                if (j + 1 == 17) {
+                                    keys["bt" + i][0].focus();
+                                } else {
+                                    keys["bt" + i][j + 1].focus();
+                                }
+                                break;
+                            case "ArrowUp":
+                                replay(VTL);
+                                if (i - 1 < 0) {
+                                    switch (j) {
+                                        case 0:
+                                        case 1:
+                                        case 2: //hiagara
+                                            HGRA.focus();
+                                            HGRA.pos = j;
+                                            break;
+
+                                        case 3:
+                                        case 4: //katakana
+                                            KTRA.focus();
+                                            KTRA.pos = j;
+                                            break;
+
+                                        case 5:
+                                        case 6: //alphabet
+                                            ALPH.focus();
+                                            ALPH.pos = j;
+                                            break;
+
+                                        case 7:
+                                        case 8: // special
+                                            CHAR.focus();
+                                            CHAR.pos = j;
+                                            break;
+
+                                        case 9:
+                                        case 10:
+                                        case 11: //backspace
+                                            DLTE.focus();
+                                            DLTE.pos = j;
+                                            break;
+
+                                        case 12:
+                                        case 13: //clear
+                                            CLER.focus();
+                                            CLER.pos = j;
+                                            break;
+
+                                        case 14:
+                                        case 15:
+                                        case 16: // OK/ENTER
+                                            ENTR.focus();
+                                            ENTR.pos = j;
+                                            break;
+
+                                        default: //fallback
+                                            console.log("J Var: " + j)
+                                            break;
+                                    }
+                                } else {
+                                    keys["bt" + (i - 1)][j].focus();
+                                }
+                                break;
+                            case "ArrowDown":
+                                replay(VTL);
+                                if (i + 1 == 6) {
+                                    // keys["bt" + 0][j].focus(); time for a show
+                                    switch (j) {
+                                        case 0:
+                                        case 1:
+                                        case 2: //hiagara
+                                            HGRA.focus();
+                                            HGRA.pos = j;
+                                            break;
+
+                                        case 3:
+                                        case 4: //katakana
+                                            KTRA.focus();
+                                            KTRA.pos = j;
+                                            break;
+
+                                        case 5:
+                                        case 6: //alphabet
+                                            ALPH.focus();
+                                            ALPH.pos = j;
+                                            break;
+
+                                        case 7:
+                                        case 8: // special
+                                            CHAR.focus();
+                                            CHAR.pos = j;
+                                            break;
+
+                                        case 9:
+                                        case 10:
+                                        case 11: //backspace
+                                            DLTE.focus();
+                                            DLTE.pos = j;
+                                            break;
+
+                                        case 12:
+                                        case 13: //clear
+                                            CLER.focus();
+                                            CLER.pos = j;
+                                            break;
+
+                                        case 14:
+                                        case 15:
+                                        case 16: // OK/ENTER
+                                            ENTR.focus();
+                                            ENTR.pos = j;
+                                            break;
+
+                                        default: //fallback
+                                            console.log("J Var: " + j);
+                                            break;
+                                    }
+                                } else {
+                                    keys["bt" + (i + 1)][j].focus();
+                                }
+                                break;
+                            default:
+                                console.log(e.code);
+                                break;
+                        }
+                    };
+                    keys["bt" + i][j].onmouseover = function (e) {
+                        keys["bt" + i][j].focus();
+                        if (lastFocus.id[2] == j.toString()) {
+                            replay(HZL);
+                        } else {
+                            //if  (lastFocus.id[0] == i.toString()) {
+                            replay(VTL);
+                        }
+                    };
+                    keys["bt" + i][j].onblur = function (e) {
+                        lastFocus = keys["bt" + i][j];
+                    };
+                    keys["bt" + i][j].addEventListener("touchstart", (e) => {
+                        replay(SEL);
+                        keys["bt" + i][j].focus();
+                        console.log(this.innerHTML);
+                    });
+                    keys["ar" + i].appendChild(keys["bt" + i][j]);
+                }
+                keyboard.appendChild(keys["ar" + i]);
+            }
+            function fill(type) {
+                let set = [];
+                switch (type) {
+                    case "chr":
+                        set = charesp;
+                        break;
+                    case "hga":
+                        set = hiagara;
+                        break;
+                    case "kta":
+                        set = katakana;
+                        break;
+                    case "abc":
+                    default:
+                        set = alphabet;
+                        break;
+                }
+
+                let rows = 6;
+                for (let i = 0; i < rows; i++) {
+                    for (let j = 0; j < 17; j++) {
+                        document.getElementById(i + "-" + j).innerHTML = set[i * 17 + j];
+                    }
+                }
+            }
+
+            function elementListen(elemnt, arg1) {
+                let order = ["HGRA", "KTRA", "ALPH", "CHAR", "DLTE", "CLER", "ENTR"];
+                let orderPos = [0, 3, 6, 8, 10, 12, 14];
+                let placement;
+                for (let i = 0; i < order.length; i++) {
+                    if (elemnt.id == order[i]) placement = i;
+                }
+
+                function espArrow(e) {
+                    if (typeof elemnt.pos == "undefined") {
+                        elemnt.pos = orderPos[placement].toString();
+                    }
+                    switch (e.code) {
+                        case "Enter":
+                            elemnt.click();
+
+                            break;
+
+                        case "ArrowUp":
+                            replay(VTL);
+                            keys["bt" + 5][elemnt.pos].focus();
+                            elemnt.pos = "";
+                            break;
+
+                        case "ArrowDown":
+                            replay(VTL);
+                            keys["bt" + 0][elemnt.pos].focus();
+                            elemnt.pos = "";
+                            break;
+
+                        case "ArrowLeft":
+                            replay(HZL);
+                            elemnt.pos = "";
+                            if (placement - 1 < 0) {
+                                document.getElementById(order[order.length - 1]).focus();
+                                document.getElementById(order[order.length - 1]).pos = orderPos[order.length - 1];
+                            } else {
+                                document.getElementById(order[placement - 1]).focus();
+                                document.getElementById(order[placement - 1]).pos = orderPos[placement - 1];
+                            }
+
+                            break;
+
+                        case "ArrowRight":
+                            replay(HZL);
+                            elemnt.pos = "";
+                            if (placement + 1 == order.length) {
+                                document.getElementById(order[0]).focus();
+                                document.getElementById(order[0]).pos = orderPos[0];
+                            } else {
+                                document.getElementById(order[placement + 1]).focus();
+                                document.getElementById(order[placement + 1]).pos = orderPos[placement + 1];
+                            }
+                            break;
+
+                        default:
+                            console.log(e.code);
+                            break;
+                    }
+                }
+                elemnt.addEventListener("keydown", espArrow);
+                elemnt.addEventListener("touchstart", (e) => {
+                    switch (elemnt.id) {
+                        case "DLTE":
+                        case "CLER":
+                            replay(USL);
+                            break;
+                        case "ENTR":
+                            replay(TRY);
+                            break;
+                        default:
+                            replay(SEL);
+                            break;
+                    }
+                });
+                elemnt.addEventListener("click", (e) => {
+                    switch (elemnt.id) {
+                        case "DLTE":
+                        case "CLER":
+                            replay(USL);
+                            break;
+                        case "ENTR":
+                            replay(TRY);
+                            break;
+                        default:
+                            replay(SEL);
+                            break;
+                    }
+                });
+                elemnt.addEventListener("mouseover", (e) => {
+                    if (!parseInt(lastFocus.id[0]).length) {
+                        replay(VTL);
+                    } else {
+                        replay(HZL);
+                    }
+                    elemnt.focus();
+                });
+            }
+
+            //        let order = ["HGRA", "KTRA", "ALPH", "CHAR", "DLTE", "CLER", "ENTR"];
+            elementListen(HGRA);
+            elementListen(KTRA);
+            elementListen(ALPH);
+            elementListen(CHAR);
+            elementListen(DLTE);
+            elementListen(CLER);
+            elementListen(ENTR);
+
+            fill();
+
+            //import
+            // Copy Text (Second Variable Delays Action in Milliseconds For Debug Purposes)
+            function copy(text = "", delay = 1) {
+                let t = document.createElement("input");
+                t.type = "text";
+                t.value = text;
+                t.select();
+                t.setSelectionRange(0, 999999999999999);
+                let j = setTimeout(function () {
+                    navigator.clipboard.writeText(t.value);
+                    clearTimeout(j);
+                }, delay);
+                t.remove();
+                return text;
+            }
+
+            // Relies of UUID Function Above
+            // Creates a Tracked Object
+            class object {
+                constructor(item, desc = "Default Object") {
+                    this.desc = desc;
+                }
+            }
+
+            class alert extends object {
+                constructor(title, text) {
+                    super();
+                    this.skipper = document.createElement("div");
+                    this.skipper.className = "skipper";
+                    this.container = document.createElement("div");
+                    this.container.className = "skipper-container-border";
+                    this.skipper.appendChild(this.container);
+                    this.content = document.createElement("div");
+                    this.content.className = "skipper-container";
+                    this.container.appendChild(this.content);
+                    this.title = document.createElement("div");
+                    this.title.className = "skipper-title";
+                    this.title.innerHTML = title;
+                    this.content.appendChild(this.title);
+                    this.text = document.createElement("div");
+                    this.text.className = "skipper-text";
+                    this.text.innerHTML = text;
+                    this.content.appendChild(this.text);
+                    this.end = document.createElement("a");
+                    this.end.tabIndex = "0";
+                    this.end.title = title;
+                    this.end.innerHTML = "OK";
+                    this.end.className = "jsAlert";
+                    this.endFunction = () => {
+                        let el = this.skipper;
+                        let i = setTimeout(
+                            function () {
+                                el.remove();
+                                clearTimeout(i);
+                            },
+                            noMotion ? 1 : 250
+                        );
+                    };
+                    this.container.addEventListener("blur", this.endFunction);
+                    this.container.onblur = this.endFunction;
+                    this.end.onblur = this.endFunction;
+                    this.end.addEventListener("blur", this.endFunction);
+                    this.end.href = "javascript:ENTR.focus();";
+                    this.content.appendChild(this.end);
+
+                    // Determine if Other Alert
+                    let o = false;
+                    let lastAlert =
+                        document.activeElement.className == "jsAlert"
+                            ? document.activeElement.parentElement.parentElement.parentElement
+                            : document.body.firstElementChild.parentElement.parentElement.parentElement;
+                    if (
+                        document.body.firstElementChild.className == "jsAlert" ||
+                        document.activeElement.className == "jsAlert"
+                    ) {
+                        o = (el) => {
+                            el.remove();
+                        };
+                    } else lastAlert = null;
+
+                    document.body.appendChild(this.skipper);
+                    document.body.insertBefore(this.skipper, document.body.firstChild);
+                    this.end.focus();
+
+                    // DOM Optimization
+                    if (typeof o == "function") {
+                        let x = setTimeout(
+                            function () {
+                                o(lastAlert);
+                                clearTimeout(x);
+                            },
+                            noMotion ? 1 : 250
+                        );
+                    }
+                }
+            }
+            
+        </script>
+    </body>
+</html>
