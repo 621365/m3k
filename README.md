@@ -2,7 +2,7 @@
 ### An HTML keyboard so inspired by the game Mother 3, that publishing this repository in the United States may get me into legal trouble (just like Mother 3 and its music).
 ### ゲーム『MOTHER3』にインスパイアされたHTMLキーボードで、このリポジトリをアメリカで公開すると、（『MOTHER3』やその音楽と同じように）法的なトラブルに巻き込まれるかもしれない。
 
-# English
+# English/英語
 
 ## Main Function
 This keyboard lets you translate Japanese text into English by pressing [Enter] on [おれり] and English text into Japanese by pressing [Shift] while pressing [Enter] on [おれり].
@@ -22,7 +22,7 @@ The entire Latin Alphabet, parts of the Greek Alphabet, many special characters,
 ## Disclaimer
 This keyboard is **not** meant to ridicule the game; I made this as an *accessibility tool*. This keyboard also makes a lot of sounds. This tool was made by a person who speaks no Japaneese, and all of the texts used in the tool have either been extracted from Mother 3 (every text not mentioned next) or used DeepL to translate UI Elements (e.g. OK Button, Clear Everything Button, Placeholder Text, Website Title, this manual). This keyboard has latency on Safari due to the fact Safari has latency on every website and is unfortunately a problem with the browser. This keyboard is not resizable but works quite well on phones. 
 
-# Japaneese
+# 日本語/Japaneese
 
 ## お知らせ
 残念ながら、言葉がわからないため、このマニュアルはオンラインで翻訳された。
