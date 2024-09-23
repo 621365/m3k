@@ -1,6 +1,7 @@
 # Maza Turi [3] Keyboard (M3K)
 ### An HTML keyboard so inspired by the game Mother 3, that publishing this repository in the United States may get me into legal trouble (just like Mother 3 and its music).
 ### ゲーム『MOTHER3』にインスパイアされたHTMLキーボードで、このリポジトリをアメリカで公開すると、（『MOTHER3』やその音楽と同じように）法的なトラブルに巻き込まれるかもしれない。
+(法的な問題で同タイトルの海外リリースがないというのは冗談だ。このツールに実害はないだろうし、万が一ジョークが誤訳されても害はないつもりだった) このマニュアルは人間が翻訳したものではない。文章に問題があったことをお詫びします。
 
 # English/英語
 
