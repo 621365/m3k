@@ -431,13 +431,13 @@
             const CLER = document.getElementById("CLER");
             const ENTR = document.getElementById("ENTR");
 
-            const ERR = new Audio("https://codehs.com/uploads/ae78636cf3ed496bf500a86f06441b81");
-            const HZL = new Audio("https://codehs.com/uploads/6ae939ac1b3ad333ba578de0b6624851");
-            const VTL = new Audio("https://codehs.com/uploads/047d7962ce75ff506c1eaa236f7184a5");
-            const BGM = new Audio("https://codehs.com/uploads/530c75b7252c27125c081b4165af193f");
-            const SEL = new Audio("https://codehs.com/uploads/72ee3d306e20c6f6baa49edba9aaf92b");
-            const TRY = new Audio("https://codehs.com/uploads/9105250f2be8b9e3d619283e61d1f9eb");
-            const USL = new Audio("https://codehs.com/uploads/859a162b7d94e8b1b81121394ff7fc10");
+            const ERR = new Audio("error.mp3");
+            const HZL = new Audio("horizontal.mp3");
+            const VTL = new Audio("vertical.mp3");
+            const BGM = new Audio("music.mp3");
+            const SEL = new Audio("select.mp3");
+            const TRY = new Audio("success.mp3");
+            const USL = new Audio("unselect.mp3");
 
             const TXTB = document.getElementById("text");
 
@@ -936,7 +936,51 @@
                     }
                 }
             }
+                        // Imported Offline Mode Module from GCN
+            var detection;
+            var online = true;
+            const sources = [
+                "KEYBOARD.HTML",
+                "INFO.JSON",
+                "offline.js",
+                "favicon.png",
+                "hd-favicon.png",
+                "error.mp3",
+                "horizontal.mp3",
+                "music.mp3",
+                "select.mp3",
+                "success.mp3",
+                "unselect.mp3",
+                "vertical.mp3"
+                
+            ];
+    
+            window.onload = () => {
+                if ("serviceWorker" in navigator && document.URL.split(":")[0] !== "file") {
+                    let workers;
+                    navigator.serviceWorker.getRegistrations().then(registrations => { workers = registrations; if (typeof workers != "undefined") if (!workers.length) navigator.serviceWorker.register("offline.js"); });
+                }
+                // Add Offline Listener
+                // Message
+                if ("onLine" in navigator) var online = (navigator.onLine);
+                 if (online) {
+                  caches.open(sources).then(function(cache) {
             
+                  // Clear Old CacheBar if Exists
+                  for (items of sources) if (cache.match(items).then(function(result) { try { return result.ok; } catch (e) { return false; } })) {
+                    cache.delete(items);
+                  }
+                  
+                  
+                  return cache.addAll(sources);
+                })
+                 }
+                // Detector
+                window.addEventListener("online", () => { online = true; new alert("コネクション発見", "インターネット検出が検出され、正常にご利用いただけるようになりました。"); });
+                window.addEventListener("offline", () => { online = false; new alert("接続なし", "デバイスのインターネット接続が利用できないため、このサイトはオフラインモードに入ろうとします。"); });
+            
+              
+            }
         </script>
     </body>
 </html>
