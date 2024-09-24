@@ -1,0 +1,24 @@
+{
+    "name": "キーボードKEYBOARD",
+    "long-name": "翻訳用MAZA3キーボード",
+    "lang": "ja-JP",
+    "start_url": "KEYBOARD.HTML",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "https://codehs.com/uploads/c24ff4c957f5d5df8658d7cbada99a5f",
+            "sizes": "82x82",
+            "type": "image/png",
+            "alt": "メタルボール",
+            "desc": "反射する丸い金属球"
+        }, 
+        { /*Force HD*/
+            "src": "https://codehs.com/uploads/833815c6c17d214a01c04f7cc48e7c24",
+            "sizes": "any",
+            "type": "image/png",
+            "alt": "メタルボール",
+            "desc": "反射する丸い金属球"
+        }
+        
+    ]
+}
